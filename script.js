@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "";
 
 class TypefaceGenerator {
   constructor() {
@@ -550,6 +550,10 @@ class TypefaceGenerator {
       alert("No generated letters available. Generate some letters first.");
       return;
     }
+    let font_name = this.elements.fontName.value;
+    if (font_name.length <= 1) {
+      font_name = new Date().toISOString();
+    }
     let glyphs = {};
     try {
       this.elements.exportOtf.disabled = true;
@@ -566,7 +570,7 @@ class TypefaceGenerator {
       }
       this.elements.exportOtf.textContent = `🖊️ Building Font-File`;
       const body = JSON.stringify({
-        font_name: fontName.value,
+        font_name,
         glyphs,
       });
       console.log(body);
@@ -581,7 +585,7 @@ class TypefaceGenerator {
         throw new Error(`SVG tracing failed: ${response.statusText}`);
       }
       const fontFile = await response.blob();
-      this.downloadBlob(fontFile, `${fontName.value}.otf`);
+      this.downloadBlob(fontFile, `${font_name}.otf`);
     } catch (error) {
       console.error("Export full font error:", error);
       alert("Failed to export otf-file. Please try again.");
