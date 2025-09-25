@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>uncanny type</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>uncanny type</h1>
+                <p class="subtitle">
+                    Generate custom typefaces using Stable Diffusion
+                </p>
+            </header>
+
+            <main>
+                <section class="preview-section">
+                    <div class="preview-container">
+                        <canvas
+                            id="letterCanvas"
+                            width="512"
+                            height="512"
+                        ></canvas>
+                        <button
+                            id="downloadPreview"
+                            class="download-btn"
+                            title="Download image"
+                        >
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                            >
+                                <path
+                                    d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"
+                                />
+                            </svg>
+                        </button>
+                        <div class="preview-controls">
+                            <label for="letterSelect">Letter:</label>
+                            <select id="letterSelect">
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                                <option value="I">I</option>
+                                <option value="J">J</option>
+                                <option value="K">K</option>
+                                <option value="L">L</option>
+                                <option value="M">M</option>
+                                <option value="N">N</option>
+                                <option value="O">O</option>
+                                <option value="P">P</option>
+                                <option value="Q">Q</option>
+                                <option value="R">R</option>
+                                <option value="S">S</option>
+                                <option value="T">T</option>
+                                <option value="U">U</option>
+                                <option value="V">V</option>
+                                <option value="W">W</option>
+                                <option value="X">X</option>
+                                <option value="Y">Y</option>
+                                <option value="Z">Z</option>
+                            </select>
+                        </div>
+                        <div class="preview-info">
+                            <span id="generationStatus">Ready</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="controls-section">
+                    <div class="control-panel">
+                        <h2>Font Source</h2>
+                        <div class="font-controls">
+                            <div class="control-group">
+                                <label for="fontUpload"
+                                    >Upload Font File (.ttf, .otf):</label
+                                >
+                                <input
+                                    type="file"
+                                    id="fontUpload"
+                                    accept=".ttf,.otf,.woff,.woff2"
+                                />
+                                <span id="fontStatus">No font loaded</span>
+                            </div>
+                            <div class="control-group">
+                                <label for="fontSize">Font Size:</label>
+                                <input
+                                    type="range"
+                                    id="fontSize"
+                                    min="100"
+                                    max="400"
+                                    value="300"
+                                />
+                                <span id="fontSizeValue">300</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-panel">
+                        <h2>Generation Settings</h2>
+                        <div class="generation-controls">
+                            <div class="control-group">
+                                <label for="modelSelect">Model:</label>
+                                <select id="modelSelect">
+                                    <option value="stable-diffusion-v1-5">
+                                        Stable Diffusion v1.5
+                                    </option>
+                                    <option value="stable-diffusion-xl-turbo">
+                                        SDXL Turbo
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="promptInput">Prompt:</label>
+                                <textarea
+                                    id="promptInput"
+                                    rows="3"
+                                    placeholder="Describe the style you want (e.g., 'organic wood texture', 'neon glow', 'marble stone')"
+                                ></textarea>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="negativePromptInput"
+                                    >Negative Prompt:</label
+                                >
+                                <textarea
+                                    id="negativePromptInput"
+                                    rows="2"
+                                    placeholder="What to avoid (e.g., 'blurry, low quality')"
+                                ></textarea>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="guidanceScale"
+                                    >Guidance Scale:</label
+                                >
+                                <input
+                                    type="range"
+                                    id="guidanceScale"
+                                    min="0"
+                                    max="20"
+                                    step="0.5"
+                                    value="7.5"
+                                />
+                                <span id="guidanceScaleValue">7.5</span>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="strength">Strength:</label>
+                                <input
+                                    type="range"
+                                    id="strength"
+                                    min="0"
+                                    max="1"
+                                    step="0.05"
+                                    value="0.75"
+                                />
+                                <span id="strengthValue">0.75</span>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="steps">Steps:</label>
+                                <input
+                                    type="range"
+                                    id="steps"
+                                    min="1"
+                                    max="50"
+                                    value="10"
+                                />
+                                <span id="stepsValue">10</span>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="seed">Seed:</label>
+                                <input
+                                    type="number"
+                                    id="seed"
+                                    value="42"
+                                    min="0"
+                                />
+                                <button id="randomSeed" class="small-button">
+                                    Random
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-panel">
+                        <h2>Noise Settings</h2>
+                        <div class="noise-controls">
+                            <div class="control-group">
+                                <label for="blurNoise">Blur Noise:</label>
+                                <input
+                                    type="range"
+                                    id="blurNoise"
+                                    min="0"
+                                    max="10"
+                                    step="0.5"
+                                    value="0"
+                                />
+                                <span id="blurNoiseValue">0</span>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="blurMask">Blur Mask:</label>
+                                <input
+                                    type="range"
+                                    id="blurMask"
+                                    min="0"
+                                    max="10"
+                                    step="0.5"
+                                    value="4"
+                                />
+                                <span id="blurMaskValue">4</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-panel">
+                        <h2>Preview Options</h2>
+                        <div class="preview-controls">
+                            <div class="control-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="duotoneToggle" />
+                                    <span class="checkmark"></span>
+                                    Apply Duotone (Black & White)
+                                </label>
+                            </div>
+
+                            <div
+                                class="control-group"
+                                id="duotoneThresholdGroup"
+                                style="display: none"
+                            >
+                                <label for="duotoneThreshold">Threshold:</label>
+                                <input
+                                    type="range"
+                                    id="duotoneThreshold"
+                                    min="1"
+                                    max="254"
+                                    value="100"
+                                />
+                                <span id="duotoneThresholdValue">100</span>
+                                <small>Higher values = more black</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-panel">
+                        <h2>Export Settings</h2>
+                        <div class="export-controls">
+                            <div class="control-group">
+                                <label for="turdsize"
+                                    >Speckle Suppression:</label
+                                >
+                                <input
+                                    type="range"
+                                    id="turdsize"
+                                    min="0"
+                                    max="10"
+                                    value="2"
+                                />
+                                <span id="turdsizeValue">2</span>
+                                <small>Remove speckles up to this size</small>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="alphamax">Corner Threshold:</label>
+                                <input
+                                    type="range"
+                                    id="alphamax"
+                                    min="0"
+                                    max="2"
+                                    step="0.1"
+                                    value="1"
+                                />
+                                <span id="alphamaxValue">1</span>
+                                <small>Sharpness of corners</small>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="opttolerance"
+                                    >Curve Optimization:</label
+                                >
+                                <input
+                                    type="range"
+                                    id="opttolerance"
+                                    min="0"
+                                    max="1"
+                                    step="0.05"
+                                    value="0.2"
+                                />
+                                <span id="opttoleranceValue">0.2</span>
+                                <small>Smoothness of curves</small>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="blacklevel"
+                                    >Black/White Cutoff:</label
+                                >
+                                <input
+                                    type="range"
+                                    id="blacklevel"
+                                    min="0"
+                                    max="1"
+                                    step="0.05"
+                                    value="0.5"
+                                />
+                                <span id="blacklevelValue">0.5</span>
+                                <small
+                                    >Threshold for black/white detection</small
+                                >
+                            </div>
+
+                            <div class="control-group">
+                                <label for="svgColor">SVG Fill Color:</label>
+                                <input
+                                    type="color"
+                                    id="svgColor"
+                                    value="#000000"
+                                />
+                            </div>
+                            <div class="control-group">
+                                <label for="fontName">Font Name:</label>
+                                <input type="text" id="fontName" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="generatePreview" class="primary-button">
+                            Generate Preview
+                        </button>
+                        <button id="generateFont" class="secondary-button">
+                            Generate Full Font
+                        </button>
+                    </div>
+
+                    <div class="action-buttons export-buttons">
+                        <button id="exportPreview" class="export-button">
+                            📄 Export Preview SVG
+                        </button>
+                        <button id="exportFullFont" class="export-button">
+                            📦 Export Full Font SVG
+                        </button>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="exportOtf" class="export-button">
+                            🖊️ Export OTF-File
+                        </button>
+                    </div>
+                </section>
+            </main>
+
+            <section class="output-section">
+                <h2>Generated Letters</h2>
+                <div id="generatedLetters" class="letter-grid"></div>
+            </section>
+        </div>
+
+        <script src="https://unpkg.com/opentype.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>
