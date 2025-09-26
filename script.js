@@ -454,8 +454,9 @@ class TypefaceGenerator {
   }
 
   async traceToSVG(imageBlob) {
+    const bw = await this.applyDuotone(imageBlob);
     const formData = new FormData();
-    formData.append("image", imageBlob);
+    formData.append("image", bw);
     formData.append("turdsize", this.elements.turdsize.value);
     formData.append("alphamax", this.elements.alphamax.value);
     formData.append("opttolerance", this.elements.opttolerance.value);
